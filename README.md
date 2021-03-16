@@ -10,7 +10,7 @@ Create a Twitter client that's fast and super customizable.
 - [] Can load your lists, other users' lists
 - [] Only loads what's configured (user/list)
 - [] Can filter out retweets, replies, keyword (in or out) per user/list
-
+- [] Somehow works in a terminal and on a phone?
 
 ## Development setup
 
