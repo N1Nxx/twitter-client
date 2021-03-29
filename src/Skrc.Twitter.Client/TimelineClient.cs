@@ -16,7 +16,7 @@ namespace Skrc.Twitter.Client
             if (!string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(userId))
             {
                 var request = CreateRequest(HttpMethod.Get,
-                                $"{_baseUrl}2/users/{userId}/tweets",
+                                $"{_baseUrl}2/users/{userId}/tweets?tweet.fields=created_at",
                                 new Dictionary<string, string>
                                 {
                                     { "Authorization", $"Bearer {token}" }
