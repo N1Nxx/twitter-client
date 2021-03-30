@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 
 namespace Skrc.Twitter.Model
@@ -17,6 +18,7 @@ namespace Skrc.Twitter.Model
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public class TimelineMetadata
     {
         [JsonProperty("newest_id")]

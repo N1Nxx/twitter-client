@@ -6,6 +6,8 @@ project.lock.json
 nupkg/
 vimspector.json
 src/Skrc.Twitter.Client.Test
+lcov.info
+TestResults/
 
 # Visual Studio Code
 .vscode

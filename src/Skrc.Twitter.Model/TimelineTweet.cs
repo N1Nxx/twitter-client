@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 
 namespace Skrc.Twitter.Model
 {
+    [ExcludeFromCodeCoverage]
     public class TimelineTweet
     {
         [JsonProperty("id")]

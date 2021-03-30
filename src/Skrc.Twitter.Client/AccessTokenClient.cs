@@ -29,7 +29,7 @@ namespace Skrc.Twitter.Client
             var response = await _client.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
             result = JsonConvert.DeserializeObject<AccessTokenResponse>(responseContent);
-            if (result == null)
+            if (!result.IsValid())
             {
                 throw new Exception(responseContent);
             }
