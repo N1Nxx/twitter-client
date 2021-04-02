@@ -1,4 +1,4 @@
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FN1Nxx%2Ftwitter-client%2Fbadge%3Fref%3Dmain&style=flat&label=build&logo=none)](https://actions-badge.atrox.dev/N1Nxx/twitter-client/goto?ref=main)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FN1Nxx%2Ftwitter-client%2Fbadge%3Fref%3Dmain&style=flat&label=build&logo=none)](https://actions-badge.atrox.dev/N1Nxx/twitter-client/goto?ref=main) [![Coverage Status](https://coveralls.io/repos/github/N1Nxx/twitter-client/badge.svg?branch=main)](https://coveralls.io/github/N1Nxx/twitter-client?branch=main)
 
 [About](https://stephane.dev/posts/creating-my-own-twitter-client/)
 
@@ -10,7 +10,7 @@ Create a Twitter client that's fast and super customizable.
 - [] Can load your lists, other users' lists
 - [] Only loads what's configured (user/list)
 - [] Can filter out retweets, replies, keyword (in or out) per user/list
-
+- [] Somehow works in a terminal and on a phone?
 
 ## Development setup
 

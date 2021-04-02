@@ -41,7 +41,7 @@ echo -e "${YELLOW}🧪 Test${NC}"
 echo ""
 
 # run the unit tests
-dotnet test --verbosity minimal
+dotnet test --no-restore --verbosity minimal
 
 # $? is a shell variable which stores the return code from what we just ran
 rc=$?
