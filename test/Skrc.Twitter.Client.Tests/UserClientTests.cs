@@ -12,10 +12,10 @@ using Xunit;
 
 namespace Skrc.Twitter.Client.Tests
 {
-    public class TimelineClientTests
+    public class UserClientTests
     {
         [Fact]
-        public async Task GetUserTimeline_Should_Throw_Exception_When_Response_Not_Expected()
+        public async Task LookupUserAsync_Should_Throw_Exception_When_Response_Not_Expected()
         {
             // Setup
             var mockResponse = JsonConvert.SerializeObject(new Exception("Invalid token"));
@@ -39,75 +39,19 @@ namespace Skrc.Twitter.Client.Tests
             // Test
 
             // Assert
-            var exception = await Assert.ThrowsAsync<Exception>(async () => await client.GetUserTimelineAsync("token", "userId"));
+            var exception = await Assert.ThrowsAsync<Exception>(async () => await client.LookupUserAsync("token", "username"));
             Assert.Equal(mockResponse, exception.Message);
         }
 
         [Fact]
-        public async Task GetUserTimeline_Should_Throw_Exception_When_Response_Invalid()
+        public async Task LookupUserAsync_Should_Throw_Exception_When_Response_Invalid()
         {
             // Setup
-            var mockResponse = JsonConvert.SerializeObject(new TimelineResponse
+            var mockResponse = JsonConvert.SerializeObject(new LookupResponse
             {
-                Data = new List<TimelineTweet>()
-            });
-            var mockHanlder = new Mock<HttpMessageHandler>();
-            mockHanlder.Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>()
-                )
-                .ReturnsAsync((HttpRequestMessage request, CancellationToken token) =>
+                Data = new TwitterUser
                 {
-                    HttpResponseMessage response = new HttpResponseMessage();
-                    response.StatusCode = System.Net.HttpStatusCode.BadRequest;
-                    response.Content = new StringContent(mockResponse);
-                    response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    return response;
-                });
-            var client = new TwitterClient(new HttpClient(mockHanlder.Object), "http://baseurl", "", "");
-
-            // Test
-
-            // Assert
-            var exception = await Assert.ThrowsAsync<Exception>(async () => await client.GetUserTimelineAsync("token", "userId"));
-            Assert.Equal(mockResponse, exception.Message);
-        }
-
-        [Fact]
-        public async Task GetUserTimeline_Should_Fail()
-        {
-            // Setup
-            var client = new TwitterClient(new HttpClient(), "http://baseurl", "", "");
-
-            // Test
-            var response = await client.GetUserTimelineAsync("", "");
-            var responseNull = await client.GetUserTimelineAsync(null, null);
-            var responseUserId = await client.GetUserTimelineAsync("token", "");
-            var responseUserIdNull = await client.GetUserTimelineAsync("token", null);
-            var responseToken = await client.GetUserTimelineAsync("", "userId");
-            var responseTokenNull = await client.GetUserTimelineAsync(null, "userId");
-
-            // Assert
-            Assert.Null(response);
-            Assert.Null(responseNull);
-            Assert.Null(responseUserId);
-            Assert.Null(responseUserIdNull);
-            Assert.Null(responseToken);
-            Assert.Null(responseTokenNull);
-        }
-
-        [Fact]
-        public async Task GetUserTimeline_Should_Succeed()
-        {
-            // Setup
-            var mockResponse = JsonConvert.SerializeObject(new TimelineResponse
-            {
-                Data = new List<TimelineTweet>(),
-                Meta = new TimelineMetadata
-                {
-                    Count = 1
+                    Id = "1234"
                 }
             });
             var mockHanlder = new Mock<HttpMessageHandler>();
@@ -128,13 +72,72 @@ namespace Skrc.Twitter.Client.Tests
             var client = new TwitterClient(new HttpClient(mockHanlder.Object), "http://baseurl", "", "");
 
             // Test
-            var response = await client.GetUserTimelineAsync("token", "userId");
+
+            // Assert
+            var exception = await Assert.ThrowsAsync<Exception>(async () => await client.LookupUserAsync("token", "username"));
+            Assert.Equal(mockResponse, exception.Message);
+        }
+
+        [Fact]
+        public async Task LookupUserAsync_Should_Fail()
+        {
+            // Setup
+            var client = new TwitterClient(new HttpClient(), "http://baseurl", "", "");
+
+            // Test
+            var response = await client.LookupUserAsync("", "");
+            var responseNull = await client.LookupUserAsync(null, null);
+            var responseUsername = await client.LookupUserAsync("token", "");
+            var responseUsernameNull = await client.LookupUserAsync("token", null);
+            var responseToken = await client.LookupUserAsync("", "userId");
+            var responseTokenNull = await client.LookupUserAsync(null, "userId");
+
+            // Assert
+            Assert.Null(response);
+            Assert.Null(responseNull);
+            Assert.Null(responseUsername);
+            Assert.Null(responseUsernameNull);
+            Assert.Null(responseToken);
+            Assert.Null(responseTokenNull);
+        }
+
+        [Fact]
+        public async Task LookupUserAsync_Should_Succeed()
+        {
+            // Setup
+            var mockResponse = JsonConvert.SerializeObject(new LookupResponse
+            {
+                Data = new TwitterUser
+                {
+                    Id = "1",
+                    Name = "Name",
+                    Username = "Username"
+                }
+            });
+            var mockHanlder = new Mock<HttpMessageHandler>();
+            mockHanlder.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>()
+                )
+                .ReturnsAsync((HttpRequestMessage request, CancellationToken token) =>
+                {
+                    HttpResponseMessage response = new HttpResponseMessage();
+                    response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                    response.Content = new StringContent(mockResponse);
+                    response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    return response;
+                });
+            var client = new TwitterClient(new HttpClient(mockHanlder.Object), "http://baseurl", "", "");
+
+            // Test
+            var response = await client.LookupUserAsync("token", "username");
 
             // Assert
             Assert.NotNull(response);
             Assert.NotNull(response.Data);
-            Assert.NotNull(response.Meta);
-            Assert.Equal(1, response.Meta.Count);
+            Assert.Equal("1", response.Data.Id);
         }
     }
 }

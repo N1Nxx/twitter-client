@@ -37,18 +37,5 @@ namespace Skrc.Twitter.Client
             request.Content = new StringContent(body, Encoding.UTF8, "application/json");
             return request;
         }
-
-        protected async Task<T> PostAsync<T>(HttpRequestMessage request)
-        {
-            T result;
-            var req = await _client.SendAsync(request);
-            var response = await req.Content.ReadAsStringAsync();
-            result = JsonConvert.DeserializeObject<T>(response);
-            if (result == null)
-            {
-                throw new Exception(response);
-            }
-            return result;
-        }
     }
 }
